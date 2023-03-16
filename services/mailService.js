@@ -16,24 +16,25 @@ class MailService {
     service: "gmail",
     host: "smtp.gmail.com",
     port: 465,
+    secure: true,
     auth: {
       type: "OAuth2",
       user: process.env.EMAIL_ADDRESS,
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      accessToken: process.env.GOOGLE_ACCESS_TOKEN,
       refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
       accessToken: oauth2Client.getAccessToken(),
     },
   });
 
-  sendMail(email, url, subject, purpose) {
-    const newUrl = `${process.env.SITE_URL}/${url}`;
+  sendMail(email, subject, purpose) {
     this.mailer
       .sendMail({
-        from: `"Node-Vue" <${process.env.EMAIL_ADDRESS}>`,
+        from: `"SM-platform" <${process.env.EMAIL_ADDRESS}>`,
         to: email,
         subject: subject,
-        html: `<a href="${newUrl}">${purpose}</a>`,
+        html: `<p>${purpose}</p>`,
       })
       .then((sent) => {})
       .catch((err) => {

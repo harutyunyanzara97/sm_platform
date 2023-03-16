@@ -21,7 +21,7 @@ class PlanController {
   }
 
   async getAllPlans(req, res) {
-    const data = await this.planService.getAllPlan(req);
+    const data = await this.planService.getAllPlans(req);
     res.status(data.statusCode).json(data);
   }
 

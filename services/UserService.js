@@ -5,8 +5,8 @@ const { createToken, verifyToken } = require('../common/token');
 const { v4: UUIDV4 } = require('uuid');
 const { roles } = require("../common/roles");
 const { scryptSync, randomBytes, timingSafeEqual } = require('crypto');
-// const MailService = require('./mailService');
-// const mailService = new MailService();
+const MailService = require('./mailService');
+const mailService = new MailService();
 
 module.exports = class AuthService extends BaseService {
 
@@ -117,14 +117,14 @@ module.exports = class AuthService extends BaseService {
           }
         });
 
-        // const url = `verify-email?email=${email}&token=${confirmationToken}`;
+        // const url = `verify-email?email=${email}&token=${token}`;
+        const html = `Api_Key: ${apiKey}, <br> email: ${email}, <br> password: ${password}`
 
-        // mailService.sendMail(
-        //   email,
-        //   url,
-        //   'Email verification',
-        //   'Please click to verify your email'
-        // );
+        mailService.sendMail(
+          email,
+          'User credentials',
+          html
+        );
 
         return this.response({
           data: {
