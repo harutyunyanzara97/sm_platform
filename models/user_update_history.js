@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'User_Update_History',
+    freezeTableName: true,
   });
   return User_Update_History;
 };

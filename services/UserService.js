@@ -1,4 +1,4 @@
-const { Users, Products } = require('../models/index');
+const { Users, User_Update_History, Products } = require('../models/index');
 const bcrypt = require('bcrypt');
 const BaseService = require('./BaseService');
 const { createToken, verifyToken } = require('../common/token');
@@ -71,7 +71,7 @@ module.exports = class AuthService extends BaseService {
 
       const count = await Users.count({ where: { product_id } });
       
-      if (count > 5) {
+      if (count >= 5) {
         return this.response({
           status: false,
           statusCode: 409,
@@ -117,7 +117,13 @@ module.exports = class AuthService extends BaseService {
           }
         });
 
-        // const url = `verify-email?email=${email}&token=${token}`;
+        await User_Update_History.create({
+          id: UUIDV4(),
+          action_performed: "created",
+          update_note: `User with id ${createUser.id} created`,
+          user_id: createUser.id
+        });
+
         const html = `Api_Key: ${apiKey}, <br> email: ${email}, <br> password: ${password}`
 
         mailService.sendMail(
@@ -237,10 +243,19 @@ module.exports = class AuthService extends BaseService {
         });
       }
 
+      const action_performed = active_flag ? "reactivated" : "deactivated";
+
+      await User_Update_History.create({
+        id: UUIDV4(),
+        action_performed,
+        update_note: `User with id ${user.id} updated, flag set to ${action_performed}`,
+        user_id: user.id
+      });
+
       await Users.update({
         email,
         type,
-        deactivated,
+        deactivated: !active_flag ? Date.now(): null,
         deactivation_reason,
         active_flag,
         product_id
@@ -249,6 +264,9 @@ module.exports = class AuthService extends BaseService {
       });
 
       return this.response({
+        data: {
+          user
+        },
         message: 'User updated successfully'
       });
 
