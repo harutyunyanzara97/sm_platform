@@ -28,7 +28,7 @@ module.exports = {
         type: Sequelize.STRING(100)
       },
       apiKey: {
-        type: Sequelize.STRING(100)
+        type: Sequelize.STRING(300)
       },
       product_id: {
         type: Sequelize.UUID,

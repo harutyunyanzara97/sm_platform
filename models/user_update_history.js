@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       User_Update_History.belongsTo(models.Users, {
         foreignKey: "user_id",
+        onDelete: 'CASCADE',
       });
     }
   }

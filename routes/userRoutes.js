@@ -14,7 +14,7 @@ const router = Router();
 router.post(
   '/create',
   // SignUpValidation,
-  roleAuth(roles.superAdmin),
+  // roleAuth(roles.superAdmin),
   userController
     .createProductUser.bind(userController)
 );

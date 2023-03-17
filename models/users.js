@@ -11,12 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Users.belongsTo(models.Products, {
-        foreignKey: "product_id"
-      });
 
       Users.hasMany(models.User_Update_History, {
-        foreignKey: "user_id"
+        foreignKey: "user_id",
+        onDelete: 'CASCADE',
+      });
+
+      Users.belongsTo(models.Products, {
+        foreignKey: "product_id"
       });
     }
   }
@@ -34,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     deactivation_reason: DataTypes.STRING(200),
     active_flag: DataTypes.BOOLEAN,
     password: DataTypes.STRING(100),
-    apiKey: DataTypes.STRING(100)
+    apiKey: DataTypes.STRING(300)
   }, {
     sequelize,
     modelName: 'Users',

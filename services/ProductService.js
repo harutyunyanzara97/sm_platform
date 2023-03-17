@@ -168,6 +168,7 @@ module.exports = class extends BaseService {
         message: 'Product ID is required'
       });
     } catch (error) {
+      console.log(error.message);
       return this.serverErrorResponse(error);
     }
   }
