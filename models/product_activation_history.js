@@ -11,7 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Product_Activation_History.belongsTo(models.Products);
+      Product_Activation_History.belongsTo(models.Products, {
+        foreignKey: "product_id"
+      });
     }
   }
   Product_Activation_History.init({
@@ -28,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Product_Activation_History',
+    freezeTableName: true
   });
   return Product_Activation_History;
 };

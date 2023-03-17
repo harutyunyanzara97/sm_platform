@@ -15,6 +15,11 @@ class PlanController {
     res.status(data.statusCode).json(data);
   }
 
+  async createPlanPricing(req, res) {
+    const data = await this.planService.createPlanPricing(req);
+    res.status(data.statusCode).json(data);
+  }
+
   async getOnePlan(req, res) {
     const data = await this.planService.getOnePlan(req);
     res.status(data.statusCode).json(data);
@@ -32,6 +37,11 @@ class PlanController {
 
   async updatePlanFeature(req, res) {
     const data = await this.planService.updatePlanFeature(req);
+    res.status(data.statusCode).json(data);
+  }
+
+  async updatePlanPricing(req, res) {
+    const data = await this.planService.updatePlanPricing(req);
     res.status(data.statusCode).json(data);
   }
 

@@ -26,6 +26,13 @@ router.post(
   planController.createPlanFeature.bind(planController)
 );
 
+router.post(
+  "/pricing/create",
+  roleAuth(roles.productAdmin),
+  // CreatePostValidation,
+  planController.createPlanPricing.bind(planController)
+);
+
 router.get("/:id",
   apiKeyAuth,
   planController.getOnePlan.bind(planController)
@@ -46,6 +53,12 @@ router.put("/feature",
   roleAuth(roles.productAdmin),
   // UpdatePostValidation,
   planController.updatePlanFeature.bind(planController)
+);
+
+router.put("/pricing",
+  roleAuth(roles.productAdmin),
+  // UpdatePostValidation,
+  planController.updatePlanPricing.bind(planController)
 );
 
 router.delete(

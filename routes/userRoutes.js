@@ -14,7 +14,7 @@ const router = Router();
 router.post(
   '/create',
   // SignUpValidation,
-  // roleAuth(roles.superAdmin),
+  roleAuth(roles.superAdmin),
   userController
     .createProductUser.bind(userController)
 );
@@ -53,36 +53,5 @@ router.delete(
   userController
     .delete.bind(userController)
 );
-
-// router.post(
-//   '/verify-email',
-//   authenticationController
-//     .verifyEmail.bind(authenticationController)
-// );
-
-// router.post(
-//   '/request-verify-email',
-//   authenticationController
-//     .requestVerifyEmail.bind(authenticationController)
-// );
-
-// router.post(
-//   '/resend-token',
-//   authenticationController
-//     .resendVerificationToken.bind(authenticationController)
-// );
-
-// router.post(
-//   '/request-reset-password',
-//   authenticationController
-//     .verifyEmailOnResetPassword.bind(authenticationController)
-// );
-
-// router.post(
-//   '/reset-password',
-//   ResetPasswordValidation,
-//   authenticationController
-//     .resetPassword.bind(authenticationController)
-// );
 
 module.exports = router;

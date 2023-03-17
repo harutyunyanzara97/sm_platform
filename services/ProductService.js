@@ -1,4 +1,4 @@
-const { Products } = require('../models/index');
+const { Products, Product_Activation_History } = require('../models/index');
 const BaseService = require('./BaseService');
 const { v4: UUIDV4 } = require('uuid');
 
@@ -22,6 +22,13 @@ module.exports = class extends BaseService {
         name,
         description,
         active_flag
+      });
+
+      await Product_Activation_History.create({
+        id: UUIDV4(),
+        action_performed: "created",
+        update_description: `Product with id ${product.id} created`,
+        product_id: product.id
       });
 
       return this.response({
@@ -94,7 +101,7 @@ module.exports = class extends BaseService {
 
   async updateProduct(req) {
     try {
-
+      
       const errors = this.handleErrors(req);
 
       if (errors.hasErrors) {
@@ -102,7 +109,7 @@ module.exports = class extends BaseService {
       }
       
       const { id } = req.body;
-
+      
       if (!id) {
         return this.response({
           status: false,
@@ -110,9 +117,9 @@ module.exports = class extends BaseService {
           message: 'Product ID is required'
         });
       }
-
-      const product = await Products.findByPk(id);
-
+      
+      let product = await Products.findByPk(id);
+     
       if (!product) {
         return this.response({
           status: false,
@@ -120,14 +127,26 @@ module.exports = class extends BaseService {
           message: "Product doesn't found"
         });
       }
-
+   
       await Products.update(req.body, {
         where: { id }
+      });
+
+      await product.reload();
+
+      const action_performed = req.body.active_flag ? "reactivated" : "deactivated";
+      
+
+      await Product_Activation_History.create({
+        id: UUIDV4(),
+        action_performed,
+        update_description: `Product with id ${product.id} updated, flag set to ${action_performed}`,
+        product_id: product.id
       });
      
       return this.response({
         data: {
-          product: await product.reload()
+          product
         },
         message: 'Product updated successfully'
       });
