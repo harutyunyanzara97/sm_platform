@@ -100,8 +100,8 @@ module.exports = class extends BaseService {
       if (errors.hasErrors) {
         return errors.body;
       }
-
-      const { name, description, active_flag, id } = req.body;
+      
+      const { id } = req.body;
 
       if (!id) {
         return this.response({
@@ -121,19 +121,19 @@ module.exports = class extends BaseService {
         });
       }
 
-      await Products.update({
-        name,
-        description,
-        active_flag
-      }, {
+      await Products.update(req.body, {
         where: { id }
       });
-
+     
       return this.response({
+        data: {
+          product: await product.reload()
+        },
         message: 'Product updated successfully'
       });
 
     } catch (error) {
+      console.log(error.message);
       return this.serverErrorResponse(error);
     }
   }
