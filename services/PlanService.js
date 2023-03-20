@@ -1,4 +1,4 @@
-const { Plans, Plan_Features, Plan_Pricing } = require('../models/index');
+const { Plans, Plan_Features, Plan_Pricing, Products } = require('../models/index');
 const BaseService = require('./BaseService');
 const { v4: UUIDV4 } = require('uuid');
 
@@ -69,35 +69,6 @@ module.exports = class extends BaseService {
     }
   }
 
-  async createPlan(req) {
-    try {
-      const errors = this.handleErrors(req);
-
-      if (errors.hasErrors) {
-        return errors.body;
-      }
-
-      const { name, description, product_id } = req.body;
-
-      const plan = await Plans.create({
-        id: UUIDV4(),
-        name,
-        description,
-        product_id
-      });
-
-      return this.response({
-        statusCode: 201,
-        data: {
-          plan
-        }
-      });
-
-    } catch (error) {
-      return this.serverErrorResponse(error);
-    }
-  }
-
   async createPlanPricing(req) {
     try {
       const errors = this.handleErrors(req);
@@ -128,7 +99,7 @@ module.exports = class extends BaseService {
       const { id } = req.params;
 
       if (id) {
-        const plan = await Plans.findByPk(id);
+        const plan = await Plans.findByPk(id, { include: { model: Products } });
 
         if (!plan) {
           return this.response({
@@ -158,7 +129,9 @@ module.exports = class extends BaseService {
   async getAllPlans(req) {
     try {
 
-      const plans = await Plans.findAll();
+      const plans = await Plans.findAll({
+        include: {model: Products}
+      });
 
       if (!plans) {
           return this.response({
@@ -217,6 +190,7 @@ module.exports = class extends BaseService {
       });
 
       return this.response({
+        data: await plan.reload(),
         message: 'Plan updated successfully'
       });
 
