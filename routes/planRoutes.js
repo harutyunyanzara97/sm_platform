@@ -34,12 +34,13 @@ router.post(
 );
 
 router.get("/:id",
+  roleAuth(roles.productAdmin),
   apiKeyAuth,
   planController.getOnePlan.bind(planController)
 );
 
 router.get("/",
-  requireAuth,
+  roleAuth(roles.productAdmin),
   planController.getAllPlans.bind(planController)
 );
 

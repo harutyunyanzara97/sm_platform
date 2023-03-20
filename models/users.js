@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Users',
     scopes: {
       withoutPassword: {
-        attributes: { exclude: ['password'] },
+        attributes: { exclude: ['password', 'apiKey'] },
       }
     }
   });

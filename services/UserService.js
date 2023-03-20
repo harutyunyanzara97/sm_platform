@@ -37,6 +37,7 @@ module.exports = class AuthService extends BaseService {
           });
 
           user.password = undefined;
+          user.apiKey = undefined;
 
           return this.response({
             data: {
@@ -93,7 +94,7 @@ module.exports = class AuthService extends BaseService {
 
       function generateSecretHash(key) {
         const salt = randomBytes(8).toString('hex');
-        const buffer = scryptSync(key, salt, 64);
+        const buffer = scryptSync(key, salt, 32);
         return `${buffer.toString('hex')}.${salt}`;
       }
 
@@ -225,7 +226,7 @@ module.exports = class AuthService extends BaseService {
         });
       }
 
-      const user = await Users.findByPk(id);
+      const user = await Users.scope("withoutPassword").findByPk(id);
 
       if (!user) {
         return this.response({

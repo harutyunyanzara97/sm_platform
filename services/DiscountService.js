@@ -15,19 +15,9 @@ module.exports = class extends BaseService {
         return errors.body;
       }
 
-      const { period_start_date, code, percentage, value, period, number_of_periods, active_flag, description, plan_id } = req.body;
-
       const discount = await Discount.create({
         id: UUIDV4(),
-        period_start_date,
-        code,
-        percentage,
-        value,
-        period,
-        number_of_periods,
-        active_flag,
-        description,
-        plan_id
+        ...req.body
       });
 
       return this.response({
@@ -107,7 +97,7 @@ module.exports = class extends BaseService {
         return errors.body;
       }
 
-      const { period_start_date, code, percentage, value, period, number_of_periods, active_flag, description, plan_id, id } = req.body;
+      const { id } = req.body;
 
       if (!id) {
         return this.response({
@@ -128,20 +118,13 @@ module.exports = class extends BaseService {
       }
 
       await Discount.update({
-        period_start_date,
-        code,
-        percentage,
-        value,
-        period,
-        number_of_periods,
-        active_flag,
-        description,
-        plan_id
+        ...req.body
       }, {
         where: { id }
       });
 
       return this.response({
+        data: await discount.reload(),
         message: 'Discount updated successfully'
       });
 

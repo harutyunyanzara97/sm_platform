@@ -17,10 +17,10 @@ const apiKeyAuth = (req, res, next) => {
         if (compareKeys(apiKey, process.env.API_KEY_SECRET)) {
             next();
         } else {
-            res.status(401).send("Not Allowed");
+            res.status(401).send("Api Key is not valid");
         }
     } catch (error) {
-        res.status(401).send("Not Allowed");
+        res.status(401).send("Api Key is not valid");
     }
     
 };

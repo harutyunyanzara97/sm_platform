@@ -15,19 +15,9 @@ module.exports = class extends BaseService {
         return errors.body;
       }
 
-      const { customer_email, start_date, end_date, next_renewal_date, auto_renew, status, charges, plan_id, discount_id } = req.body;
-
       const subscription = await Subscription.create({
         id: UUIDV4(),
-        customer_email,
-        start_date,
-        end_date,
-        next_renewal_date,
-        auto_renew,
-        status,
-        charges,
-        plan_id,
-        discount_id
+        ...req.body
       });
 
       return this.response({
@@ -107,7 +97,7 @@ module.exports = class extends BaseService {
         return errors.body;
       }
 
-      const { customer_email, start_date, end_date, next_renewal_date, auto_renew, status, charges, plan_id, discount_id, id } = req.body;
+      const { id } = req.body;
 
       if (!id) {
         return this.response({
@@ -128,20 +118,13 @@ module.exports = class extends BaseService {
       }
 
       await Subscription.update({
-        customer_email,
-        start_date,
-        end_date,
-        next_renewal_date,
-        auto_renew,
-        status,
-        charges,
-        plan_id,
-        discount_id
+        ...req.body
       }, {
         where: { id }
       });
 
       return this.response({
+        data: await subscription.reload(),
         message: 'Subscription updated successfully'
       });
 
