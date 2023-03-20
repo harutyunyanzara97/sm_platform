@@ -28,7 +28,8 @@ module.exports = class extends BaseService {
         statusCode: 201,
         data: {
           plan
-        }
+        },
+        message: "Created Successfully"
       });
 
     } catch (error) {
@@ -44,17 +45,9 @@ module.exports = class extends BaseService {
         return errors.body;
       }
 
-      const { param_name, param_type, param_description, param_limit, param_alert_level, param_flag, plan_id } = req.body;
-
       const planFeature = await Plan_Features.create({
         id: UUIDV4(),
-        param_name,
-        param_type,
-        param_description,
-        param_limit,
-        param_alert_level,
-        param_flag,
-        plan_id
+        ...req.body
       });
 
       return this.response({
